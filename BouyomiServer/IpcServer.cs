@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting;
+﻿using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Ipc;
-using System.Windows;
 using FNF.Utility;
 using NAudio.Wave;
 using ZundaChan.Voicevox;
-using System.Reactive;
-using System.Reactive.Subjects;
 using System.Reactive.Linq;
-using ZundaChan.Utils;
 
 namespace ZundaChan.BouyomiServer
 {

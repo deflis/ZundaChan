@@ -32,8 +32,7 @@ for (int n = -1; n < WaveOut.DeviceCount; n++)
     Console.WriteLine($"{n}: {caps.ProductName}");
 }
 
-var outputDevice = new WaveOutEvent();
-var client = new ZundaChan.Voicevox.Client("http://localhost:50021/", outputDevice);
+var client = new ZundaChan.Voicevox.Client("http://localhost:50021/");
 var ipcServer = new IpcServer(client, (int)(long)configFile["device"], (int)(long)configFile["speaker"]);
 Console.WriteLine("Hello World!");
 while (Console.ReadKey().KeyChar != 'q') { }

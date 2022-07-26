@@ -1,28 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
-using System.Web;
-using System.Media;
-using NAudio.Wave;
+﻿using System.Text;
 
 namespace ZundaChan.Voicevox
 {
     public class Client
     {
-        public Client(string baseUrl, WaveOutEvent outputDevice)
+        public Client(string baseUrl)
         {
             this.client = new HttpClient();
             this.BaseUrl = baseUrl;
-            this.outputDevice = outputDevice;
         }
 
         public string BaseUrl { get; }
         private HttpClient client { get; }
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        private readonly WaveOutEvent outputDevice;
 
 
         public async Task<Stream> CreateAsync(string text, int speakerId)

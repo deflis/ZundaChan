@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace FNF.Utility
 {
     class BouyomiChanRemoting : MarshalByRefObject
