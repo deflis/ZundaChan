@@ -1,0 +1,22 @@
+name: build
+
+on:
+  push: { branches: [main] }
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        arch: ["x86", "x64"]
+    runs-on: windows-2019
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: "4.8"
+      - run: dotnet build --configuration Release
+      - uses: actions/upload-artifact@v1.0.0
+        with:
+          name: artifacts
+          path: bin\Release\net48
