@@ -48,14 +48,11 @@ namespace ZundaChan
 
         public static void Reload()
         {
-            Instance.reload();
+            Instance.configFile = LoadConfig();
         }
 
-        private Config()
-        {
-            reload();
-        }
-        private void reload()
+        private Config() => configFile = LoadConfig();
+        private static TomlTable LoadConfig()
         {
             string appFilePath = System.Reflection.Assembly.GetEntryAssembly().Location;
             var tomlFile = System.Text.RegularExpressions.Regex.Replace(
@@ -71,7 +68,7 @@ namespace ZundaChan
             {
                 toml = tomlReader.ReadToEnd();
             }
-            configFile = Toml.ToModel(toml);
+            return Toml.ToModel(toml);
         }
     }
 }

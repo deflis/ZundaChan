@@ -13,12 +13,13 @@ namespace FNF.Utility
             this.ipcServer = ipcServer;
         }
 
-        public override object InitializeLifetimeService()
+        public override object? InitializeLifetimeService()
         {
             return null;
         }
 
-        public void AddTalkTask(string sTalkText) {
+        public void AddTalkTask(string sTalkText)
+        {
             Logger.Info($"AddTalkTask({sTalkText})");
             ipcServer.AddTalkTask(sTalkText);
         }

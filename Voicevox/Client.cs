@@ -29,9 +29,14 @@ namespace ZundaChan.Voicevox
                 {
                     throw new HttpRequestException($"{await speakersResult.Content.ReadAsStringAsync()}");
                 }
-                return JsonSerializer.Deserialize<Speaker[]>(await speakersResult.Content.ReadAsStringAsync());
+                var result = JsonSerializer.Deserialize<Speaker[]>(await speakersResult.Content.ReadAsStringAsync());
+                if (result == null)
+                {
+                    throw new Exception("JSONがパースできませんでした。");
+                }
+                return result;
             }
-            
+
         }
 
         public async Task<string> BuildAudioQueryJsonAsync(string text, int speakerId)
@@ -85,13 +90,13 @@ namespace ZundaChan.Voicevox
 
         internal class Speaker
         {
-            public string name { get; set; }
-            public string speaker_uuid { get; set; }
-            public Style[] styles { get; set; }
+            public string name { get; set; } = "";
+            public string speaker_uuid { get; set; } = "";
+            public Style[] styles { get; set; } = new Style[] { };
 
             internal class Style
             {
-                public string name { get; set; }
+                public string name { get; set; } = "";
                 public int id { get; set; }
 
             }
