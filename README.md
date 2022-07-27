@@ -10,17 +10,17 @@ IpcClientChannel 接続によって、 [マルチコメントビューア](https
 
 ## 使い方
 
-
+[https://github.com/deflis/ZundaChan/releases] からダウンロードできます。
 
 ### ZundaChan の設定方法
 
 同じディレクトリにある `ZundaChan.toml` を編集してください。TOML 形式になっています。（本来は実行ファイル名に対応した toml ファイルになっています）
 
-起動時に以下の表示が出ます。これらは設定ファイルで利用可能な設定項目になります。
+起動時に以下の表示が出ます。これらは設定ファイルで利用可能な設定項目になります。現在選択されているものには `*` がついています
 
 ```
 AudioDevices:
--1: Microsoft Sound Mapper
+-1:*Microsoft Sound Mapper
 0: VoiceMeeter Input (VB-Audio Voi
 1: スピーカー (Voidol 音声)
 ...(略)
