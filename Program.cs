@@ -1,38 +1,54 @@
 ﻿using NAudio.Wave;
-using Tomlyn;
 using ZundaChan.BouyomiServer;
-var config = new NLog.Config.LoggingConfiguration();
+using ZundaChan;
+using System.Linq;
 
-string appFilePath = System.Reflection.Assembly.GetEntryAssembly().Location;
-var tomlFile = System.Text.RegularExpressions.Regex.Replace(
-    appFilePath,
-    "\\.exe|dll$",
-    ".toml",
-    System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-
-string toml;
-using (var tomlStream = new FileStream(tomlFile, FileMode.Open))
-using (var tomlReader = new StreamReader(tomlStream))
 {
-    toml = tomlReader.ReadToEnd();
+    var config = new NLog.Config.LoggingConfiguration();
+
+    // Targets where to log to: File and Console
+    var logconsole = new NLog.Targets.ConsoleTarget("logconsole");
+    // Rules for mapping loggers to targets            
+    config.AddRule(NLog.LogLevel.Debug, NLog.LogLevel.Fatal, logconsole);
+    // Apply config           
+    NLog.LogManager.Configuration = config;
 }
-var configFile = Toml.ToModel(toml);
+var logger = NLog.LogManager.GetCurrentClassLogger();
 
-// Targets where to log to: File and Console
-var logconsole = new NLog.Targets.ConsoleTarget("logconsole");
-
-// Rules for mapping loggers to targets            
-config.AddRule(NLog.LogLevel.Debug, NLog.LogLevel.Fatal, logconsole);
-
-// Apply config           
-NLog.LogManager.Configuration = config;
+var client = new ZundaChan.Voicevox.Client();
+Console.WriteLine($"AudioDevices:");
 for (int n = -1; n < WaveOut.DeviceCount; n++)
 {
     var caps = WaveOut.GetCapabilities(n);
     Console.WriteLine($"{n}: {caps.ProductName}");
 }
+Console.WriteLine($"Speakers:");
+var speakers = await client.GetSpeakersAsync();
+foreach (var speaker in speakers.SelectMany((speaker) => speaker.styles.Select(style => new { Name = $"{speaker.name}({style.name})", Id = (int)style.id })))
+{
+    Console.WriteLine($"{speaker.Id}: {speaker.Name}");
+}
 
-var client = new ZundaChan.Voicevox.Client("http://localhost:50021/");
-var ipcServer = new IpcServer(client, (int)(long)configFile["device"], (int)(long)configFile["speaker"]);
-Console.WriteLine("Hello World!");
-while (Console.ReadKey().KeyChar != 'q') { }
+var proxy = new Proxy(client);
+try
+{
+    var ipcServer = new IpcServer(proxy);
+    logger.Info("IPCサーバを起動しました");
+}
+catch (Exception ex)
+{
+    logger.Fatal("IPCサーバの起動に失敗しました", ex);
+    return 1;
+}
+while (true)
+{
+    var key = Console.ReadKey();
+    if (key.KeyChar == 'q' || key.Key == ConsoleKey.Escape)
+    {
+        return 0;
+    }
+    else if (key.KeyChar == 'r')
+    {
+        Config.Reload();
+    }
+}

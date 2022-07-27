@@ -1,56 +1,54 @@
 ﻿
+using ZundaChan.BouyomiServer;
+
 namespace FNF.Utility
 {
     class BouyomiChanRemoting : MarshalByRefObject
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        private readonly IpcServer ipcServer;
+
+        public BouyomiChanRemoting(IpcServer ipcServer)
+        {
+            this.ipcServer = ipcServer;
+        }
 
         public override object InitializeLifetimeService()
         {
             return null;
         }
-        public delegate void AddTalkTaskEventHandler(string sTalkText);
-        public delegate void SimpleEventHandler();
-
-        public event AddTalkTaskEventHandler OnAddTalkTask;
-        public event SimpleEventHandler OnClearTalkTask;
-        public event SimpleEventHandler OnSkipTalkTask;
 
         public void AddTalkTask(string sTalkText) {
             Logger.Info($"AddTalkTask({sTalkText})");
-            OnAddTalkTask(sTalkText);
+            ipcServer.AddTalkTask(sTalkText);
         }
         public void AddTalkTask(string sTalkText, int iSpeed, int iVolume, int vType)
         {
             Logger.Info($"AddTalkTask({sTalkText},{iSpeed},{iVolume},{vType})");
-            OnAddTalkTask(sTalkText);
+            ipcServer.AddTalkTask(sTalkText);
         }
         public void AddTalkTask(string sTalkText, int iSpeed, int iTone, int iVolume, int vType)
         {
             Logger.Info($"AddTalkTask({sTalkText},{iSpeed},{iTone},{iVolume},{vType})");
-            OnAddTalkTask(sTalkText);
+            ipcServer.AddTalkTask(sTalkText);
         }
         public int AddTalkTask2(string sTalkText)
         {
-            Logger.Info($"AddTalkTask2({sTalkText})"); 
-            OnAddTalkTask(sTalkText);
-            return 0;
+            Logger.Info($"AddTalkTask2({sTalkText})");
+            return ipcServer.AddTalkTask(sTalkText);
         }
         public int AddTalkTask2(string sTalkText, int iSpeed, int iTone, int iVolume, int vType)
         {
             Logger.Info($"AddTalkTask2({sTalkText},{iSpeed},{iTone},{iVolume},{vType})");
-            OnAddTalkTask(sTalkText);
-            return 0;
+            return ipcServer.AddTalkTask(sTalkText);
         }
         public void ClearTalkTasks()
         {
             Logger.Info($"ClearTalkTasks");
-            OnClearTalkTask();
         }
         public void SkipTalkTask()
         {
             Logger.Info($"SkipTalkTask");
-            OnSkipTalkTask();
         }
 
         public int TalkTaskCount { get; internal set; }

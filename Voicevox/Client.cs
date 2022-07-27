@@ -1,19 +1,17 @@
 ﻿using System.Text;
+using System.Text.Json;
 
 namespace ZundaChan.Voicevox
 {
-    public class Client
+    internal class Client
     {
-        public Client(string baseUrl)
-        {
-            this.client = new HttpClient();
-            this.BaseUrl = baseUrl;
-        }
-
-        public string BaseUrl { get; }
-        private HttpClient client { get; }
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        private HttpClient client { get; }
 
+        public Client()
+        {
+            client = new HttpClient();
+        }
 
         public async Task<Stream> CreateAsync(string text, int speakerId)
         {
@@ -21,9 +19,24 @@ namespace ZundaChan.Voicevox
             return await SynthesisAsync(query, speakerId);
         }
 
+        public async Task<Speaker[]> GetSpeakersAsync()
+        {
+            var speakersUriBuilder = new UriBuilder(Config.BaseUrl);
+            speakersUriBuilder.Path = "/speakers";
+            using (var speakersResult = await client.GetAsync(speakersUriBuilder.Uri))
+            {
+                if (speakersResult.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    throw new HttpRequestException($"{await speakersResult.Content.ReadAsStringAsync()}");
+                }
+                return JsonSerializer.Deserialize<Speaker[]>(await speakersResult.Content.ReadAsStringAsync());
+            }
+            
+        }
+
         public async Task<string> BuildAudioQueryJsonAsync(string text, int speakerId)
         {
-            var audioQueryUriBuilder = new UriBuilder(BaseUrl);
+            var audioQueryUriBuilder = new UriBuilder(Config.BaseUrl);
             audioQueryUriBuilder.Path = "/audio_query";
             using (var content = new FormUrlEncodedContent(new Dictionary<string, string>()
                 {
@@ -37,13 +50,17 @@ namespace ZundaChan.Voicevox
             using (var emptyContent = new StringContent("", Encoding.UTF8, "application/json"))
             using (var audioQueryResult = await client.PostAsync(audioQueryUriBuilder.Uri, emptyContent))
             {
+                if (audioQueryResult.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    throw new HttpRequestException($"{await audioQueryResult.Content.ReadAsStringAsync()}");
+                }
                 return await audioQueryResult.Content.ReadAsStringAsync();
             }
         }
 
         public async Task<Stream> SynthesisAsync(string audioQueryJson, int speakerId)
         {
-            var synthesisUriBuilder = new UriBuilder(BaseUrl);
+            var synthesisUriBuilder = new UriBuilder(Config.BaseUrl);
             synthesisUriBuilder.Path = "/synthesis";
             using (var content = new FormUrlEncodedContent(new Dictionary<string, string>()
             {
@@ -63,6 +80,20 @@ namespace ZundaChan.Voicevox
                     throw new HttpRequestException($"{await synthesisResult.Content.ReadAsStringAsync()}");
                 }
                 return await synthesisResult.Content.ReadAsStreamAsync();
+            }
+        }
+
+        internal class Speaker
+        {
+            public string name { get; set; }
+            public string speaker_uuid { get; set; }
+            public Style[] styles { get; set; }
+
+            internal class Style
+            {
+                public string name { get; set; }
+                public int id { get; set; }
+
             }
         }
     }
