@@ -1,7 +1,6 @@
 ﻿using NAudio.Wave;
 using ZundaChan.BouyomiServer;
 using ZundaChan;
-using System.Linq;
 
 {
     var config = new NLog.Config.LoggingConfiguration();
@@ -20,13 +19,13 @@ Console.WriteLine($"AudioDevices:");
 for (int n = -1; n < WaveOut.DeviceCount; n++)
 {
     var caps = WaveOut.GetCapabilities(n);
-    Console.WriteLine($"{n}: {caps.ProductName}");
+    Console.WriteLine($"{n}:{(Config.DeviceNumber == n ? "*" : " ")}{caps.ProductName}");
 }
 Console.WriteLine($"Speakers:");
 var speakers = await client.GetSpeakersAsync();
 foreach (var speaker in speakers.SelectMany((speaker) => speaker.styles.Select(style => new { Name = $"{speaker.name}({style.name})", Id = (int)style.id })))
 {
-    Console.WriteLine($"{speaker.Id}: {speaker.Name}");
+    Console.WriteLine($"{speaker.Id}:{(Config.SpeakerId == speaker.Id ? "*" : " ")}{speaker.Name}");
 }
 
 var proxy = new Proxy(client);
