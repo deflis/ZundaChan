@@ -10,7 +10,39 @@ IpcClientChannel 接続によって、 [マルチコメントビューア](https
 
 ## 使い方
 
-後で書きます。
+
+
+### ZundaChan の設定方法
+
+同じディレクトリにある `ZundaChan.toml` を編集してください。TOML 形式になっています。（本来は実行ファイル名に対応した toml ファイルになっています）
+
+起動時に以下の表示が出ます。これらは設定ファイルで利用可能な設定項目になります。
+
+```
+AudioDevices:
+-1: Microsoft Sound Mapper
+0: VoiceMeeter Input (VB-Audio Voi
+1: スピーカー (Voidol 音声)
+...(略)
+Speakers:
+2: 四国めたん(ノーマル)
+0: 四国めたん(あまあま)
+...(略)
+```
+
+- `AudioDevices` が音声デバイスの指定 `device` の ID となっています。デフォルトは `-1` です。
+- `Speakers` がキャラクターの指定 `speaker` の ID となっています。デフォルトは `3` (ずんだもん(ノーマル))です。
+- `voicevox_engine` は、VOICEVOX ENGINE への接続先を示します。互換性のある COEIROLINK 等でも利用可能だと思いますが現時点では未確認です。
+
+### 起動後の設定リロード及び終了
+
+- r キーを押すことにより、起動中でも設定の再読み込みをすることができます。
+- q キーを押すことにより、終了します。
+
+### マルチコメントビューアへの設定
+
+棒読みちゃん実行ファイルの代わりに指定することができます。選択ダイアログで `*` をファイル名のところに入れると `BouyomiChan.exe` 以外でも指定可能です。
+なお、 `BouyomiChan.exe` にファイル名を変更した場合は設定ファイルも同じ名前に更新してください。
 
 ## 他の方法との比較
 
@@ -52,3 +84,8 @@ IpcClientChannel 接続によって、 [マルチコメントビューア](https
 - [棒読みちゃん](https://chi.usamimi.info/Program/Application/BouyomiChan/)
 - [偽装ちゃん](https://hgotoh.jp/wiki/doku.php/documents/tools/tools-206)
   - 偽装ちゃんの実装より着想を得て IPC 接続を実装しました。この場を借りてお礼申し上げます。
+
+## スペシャルサンクス
+
+- [ヒホさん](https://twitter.com/hiho_karuta)
+- VOICEVOX 開発者の皆様
