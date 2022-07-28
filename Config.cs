@@ -17,6 +17,9 @@ namespace ZundaChan
             }
         }
 
+        /// <summary>
+        /// VOICEVOXの音声を再生するデバイス番号
+        /// </summary>
         public static int DeviceNumber
         {
             get
@@ -25,6 +28,9 @@ namespace ZundaChan
             }
         }
 
+        /// <summary>
+        /// VOICEVOXのスピーカーID
+        /// </summary>
         public static int SpeakerId
         {
             get
@@ -33,6 +39,9 @@ namespace ZundaChan
             }
         }
 
+        /// <summary>
+        /// VOICEVOX ENGINEのURL
+        /// </summary>
         public static string BaseUrl
         {
             get
@@ -41,6 +50,9 @@ namespace ZundaChan
             }
         }
 
+        /// <summary>
+        /// 設定を再読込する
+        /// </summary>
         public static void Reload()
         {
             Instance.configFile = LoadConfig();

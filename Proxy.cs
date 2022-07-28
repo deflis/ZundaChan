@@ -4,6 +4,9 @@ using System.Collections.Concurrent;
 
 namespace ZundaChan
 {
+    /// <summary>
+    /// VOICEVOX ENGINE APIと棒読みちゃんAPIの間を取り持つ
+    /// </summary>
     internal class Proxy
     {
         private BlockingCollection<Stream> playTalkJobs = new BlockingCollection<Stream>();
@@ -11,6 +14,7 @@ namespace ZundaChan
 
         private readonly Client client;
 
+        /// <param name="client">VOICEVOXクライアント</param>
         public Proxy(Client client)
         {
 
@@ -20,13 +24,19 @@ namespace ZundaChan
             thread.Start();
 
         }
+
+        /// <summary>
+        /// 読み上げ音声を登録する
+        /// </summary>
+        /// <param name="sTalkText">喋らせたい文章</param>
+        /// <returns>読み上げタスクID。</returns>
         public int AddTalkTask(string text)
         {
             TalkTask(text);
             return 0;
         }
 
-        public async void TalkTask(string text)
+        private async void TalkTask(string text)
         {
             playTalkJobs.Add(await CreateVoiceAsync(text));
         }

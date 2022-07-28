@@ -3,6 +3,9 @@ using System.Text.Json;
 
 namespace ZundaChan.Voicevox
 {
+    /// <summary>
+    /// VOICEVOX ENGINEクライアント
+    /// </summary>
     internal class Client
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
@@ -13,6 +16,12 @@ namespace ZundaChan.Voicevox
             client = new HttpClient();
         }
 
+        /// <summary>
+        /// AudioQuery + Synthesis を自動で行います
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="speakerId"></param>
+        /// <returns></returns>
         public async Task<Stream> CreateAsync(string text, int speakerId)
         {
             var query = await BuildAudioQueryJsonAsync(text, speakerId);
