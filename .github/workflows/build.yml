@@ -32,4 +32,4 @@ jobs:
       - uses: actions/upload-artifact@v1.0.0
         with:
           name: release
-          path: bin\Release\net48
+          path: ZundaChan.Ipc\bin\Release\net48

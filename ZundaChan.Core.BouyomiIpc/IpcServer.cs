@@ -3,15 +3,15 @@ using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Ipc;
 using FNF.Utility;
 
-namespace ZundaChan.BouyomiServer
+namespace ZundaChan.Core.BouyomiIpc
 {
-    internal class IpcServer : IDisposable
+    public class IpcServer : IDisposable
     {
         private readonly BouyomiChanRemoting ShareIpcObject;
         private readonly IpcServerChannel IpcCh;
-        private readonly Proxy proxy;
+        private readonly IProxy proxy;
 
-        public IpcServer(Proxy proxy)
+        public IpcServer(IProxy proxy)
         {
             // IPC接続を行う
             ShareIpcObject = new BouyomiChanRemoting(this);
@@ -19,7 +19,7 @@ namespace ZundaChan.BouyomiServer
             IpcCh.IsSecured = false;
 
             ChannelServices.RegisterChannel(IpcCh, false);
-            RemotingServices.Marshal(ShareIpcObject, "Remoting", typeof(FNF.Utility.BouyomiChanRemoting));
+            RemotingServices.Marshal(ShareIpcObject, "Remoting", typeof(BouyomiChanRemoting));
             this.proxy = proxy;
         }
 
@@ -29,7 +29,7 @@ namespace ZundaChan.BouyomiServer
             IpcCh.StopListening(null);
             ChannelServices.UnregisterChannel(IpcCh);
         }
-        
+
         /// <summary>
         /// 棒読みちゃんに音声合成タスクを追加します。
         /// </summary>

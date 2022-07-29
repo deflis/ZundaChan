@@ -1,17 +1,17 @@
 ﻿using System.Text;
 using System.Text.Json;
 
-namespace ZundaChan.Voicevox
+namespace ZundaChan.Core.Voicevox
 {
     /// <summary>
     /// VOICEVOX ENGINEクライアント
     /// </summary>
-    internal class Client
+    public class VoicevoxClient
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private HttpClient client { get; }
 
-        public Client()
+        public VoicevoxClient()
         {
             client = new HttpClient();
         }
@@ -97,13 +97,13 @@ namespace ZundaChan.Voicevox
             }
         }
 
-        internal class Speaker
+        public class Speaker
         {
             public string name { get; set; } = "";
             public string speaker_uuid { get; set; } = "";
             public Style[] styles { get; set; } = new Style[] { };
 
-            internal class Style
+            public class Style
             {
                 public string name { get; set; } = "";
                 public int id { get; set; }

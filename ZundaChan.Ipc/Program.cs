@@ -1,6 +1,7 @@
 ﻿using NAudio.Wave;
-using ZundaChan.BouyomiServer;
-using ZundaChan;
+using ZundaChan.Core;
+using ZundaChan.Core.BouyomiIpc;
+using ZundaChan.Core.Voicevox;
 
 {
     var config = new NLog.Config.LoggingConfiguration();
@@ -14,7 +15,7 @@ using ZundaChan;
 }
 var logger = NLog.LogManager.GetCurrentClassLogger();
 
-var client = new ZundaChan.Voicevox.Client();
+var client = new VoicevoxClient();
 Console.WriteLine($"AudioDevices:");
 for (int n = -1; n < WaveOut.DeviceCount; n++)
 {
@@ -22,7 +23,7 @@ for (int n = -1; n < WaveOut.DeviceCount; n++)
     Console.WriteLine($"{n}:{(Config.DeviceNumber == n ? "*" : " ")}{caps.ProductName}");
 }
 
-var proxy = new Proxy(client);
+var proxy = new VoicevoxProxy(client);
 try
 {
     var ipcServer = new IpcServer(proxy);

@@ -1,9 +1,9 @@
 ﻿using Tomlyn;
 using Tomlyn.Model;
 
-namespace ZundaChan
+namespace ZundaChan.Core
 {
-    internal class Config
+    public class Config
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private static Config instance = new Config();

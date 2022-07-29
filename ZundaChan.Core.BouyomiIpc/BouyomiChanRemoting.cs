@@ -1,5 +1,4 @@
-﻿
-using ZundaChan.BouyomiServer;
+﻿using ZundaChan.Core.BouyomiIpc;
 
 namespace FNF.Utility
 {

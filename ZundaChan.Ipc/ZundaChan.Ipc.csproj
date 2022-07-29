@@ -6,16 +6,17 @@
     <TargetFramework>net48</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AssemblyName>BouyomiChan</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NAudio.Core" Version="2.1.0" />
     <PackageReference Include="NAudio.WinForms" Version="2.1.0" />
-    <PackageReference Include="NAudio.WinMM" Version="2.1.0" />
-    <PackageReference Include="NLog" Version="5.0.1" />
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="System.Text.Json" Version="6.0.5" />
-    <PackageReference Include="Tomlyn" Version="0.15.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZundaChan.Core.BouyomiIpc\ZundaChan.Core.BouyomiIpc.csproj" />
+    <ProjectReference Include="..\ZundaChan.Core.Voicevox\ZundaChan.Core.Voicevox.csproj" />
+    <ProjectReference Include="..\ZundaChan.Core\ZundaChan.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +27,7 @@
     <None Update="README.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="ZundaChan.toml">
+    <None Update="BouyomiChan.toml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

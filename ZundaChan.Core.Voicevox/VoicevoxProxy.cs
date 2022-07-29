@@ -1,21 +1,20 @@
-﻿using ZundaChan.Voicevox;
-using NAudio.Wave;
+﻿using NAudio.Wave;
 using System.Collections.Concurrent;
 
-namespace ZundaChan
+namespace ZundaChan.Core.Voicevox
 {
     /// <summary>
     /// VOICEVOX ENGINE APIと棒読みちゃんAPIの間を取り持つ
     /// </summary>
-    internal class Proxy
+    public class VoicevoxProxy : IProxy
     {
         private BlockingCollection<Stream> playTalkJobs = new BlockingCollection<Stream>();
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        private readonly Client client;
+        private readonly VoicevoxClient client;
 
         /// <param name="client">VOICEVOXクライアント</param>
-        public Proxy(Client client)
+        public VoicevoxProxy(VoicevoxClient client)
         {
 
             this.client = client;
@@ -41,7 +40,8 @@ namespace ZundaChan
             try
             {
                 playTalkJobs.Add(await CreateVoiceAsync(text));
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Logger.Error("ボイス生成でエラーが発生しました", ex);
             }
@@ -60,7 +60,7 @@ namespace ZundaChan
                     Logger.Error("ボイス再生でエラーが発生しました", ex);
                 }
             }
-}
+        }
 
         private async Task<Stream> CreateVoiceAsync(string text)
         {
@@ -85,6 +85,7 @@ namespace ZundaChan
                 outputDevice.Play();
                 await tcs.Task;
             }
+            return;
         }
     }
 }
