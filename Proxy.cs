@@ -38,16 +38,29 @@ namespace ZundaChan
 
         private async void TalkTask(string text)
         {
-            playTalkJobs.Add(await CreateVoiceAsync(text));
+            try
+            {
+                playTalkJobs.Add(await CreateVoiceAsync(text));
+            } catch (Exception ex)
+            {
+                Logger.Error("ボイス生成でエラーが発生しました", ex);
+            }
         }
 
         private async void OnStart()
         {
             foreach (var stream in playTalkJobs.GetConsumingEnumerable(CancellationToken.None))
             {
-                await PlayVoiceAsync(stream);
+                try
+                {
+                    await PlayVoiceAsync(stream);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("ボイス再生でエラーが発生しました", ex);
+                }
             }
-        }
+}
 
         private async Task<Stream> CreateVoiceAsync(string text)
         {

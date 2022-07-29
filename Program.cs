@@ -21,12 +21,6 @@ for (int n = -1; n < WaveOut.DeviceCount; n++)
     var caps = WaveOut.GetCapabilities(n);
     Console.WriteLine($"{n}:{(Config.DeviceNumber == n ? "*" : " ")}{caps.ProductName}");
 }
-Console.WriteLine($"Speakers:");
-var speakers = await client.GetSpeakersAsync();
-foreach (var speaker in speakers.SelectMany((speaker) => speaker.styles.Select(style => new { Name = $"{speaker.name}({style.name})", Id = (int)style.id })))
-{
-    Console.WriteLine($"{speaker.Id}:{(Config.SpeakerId == speaker.Id ? "*" : " ")}{speaker.Name}");
-}
 
 var proxy = new Proxy(client);
 try
@@ -39,6 +33,14 @@ catch (Exception ex)
     logger.Fatal("IPCサーバの起動に失敗しました", ex);
     return 1;
 }
+
+var speakers = await client.GetSpeakersAsync();
+Console.WriteLine($"Speakers:");
+foreach (var speaker in speakers.SelectMany((speaker) => speaker.styles.Select(style => new { Name = $"{speaker.name}({style.name})", Id = (int)style.id })))
+{
+    Console.WriteLine($"{speaker.Id}:{(Config.SpeakerId == speaker.Id ? "*" : " ")}{speaker.Name}");
+}
+
 while (true)
 {
     var key = Console.ReadKey();
