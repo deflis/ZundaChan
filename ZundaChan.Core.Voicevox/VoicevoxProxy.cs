@@ -1,5 +1,6 @@
 ﻿using NAudio.Wave;
 using System.Collections.Concurrent;
+using System.Text.Json;
 
 namespace ZundaChan.Core.Voicevox
 {
@@ -37,7 +38,23 @@ namespace ZundaChan.Core.Voicevox
         {
             try
             {
-                playTalkJobs.Add(await CreateVoiceAsync(task.Text));
+                var speakerId = Config.SpeakerId;
+                var rawQuery = await client.BuildAudioQueryJsonAsync(task.Text, speakerId);
+                var query = Parse(rawQuery);
+                if (task.Volume != -1)
+                {
+                    query.volumeScale = (double)query.volumeScale * task.Volume / 100;
+                }
+                if (task.Tone != -1)
+                {
+                    query.pitchScale = ((double)task.Tone / 100) - 1;
+                }
+                if (task.Speed != -1)
+                {
+                    query.speedScale = (double)query.speedScale * task.Speed / 100;
+                }
+                Logger.Debug(JsonSerializer.Serialize(query));
+                playTalkJobs.Add(await client.SynthesisAsync( JsonSerializer.Serialize(query), speakerId));
             }
             catch (Exception ex)
             {
@@ -60,11 +77,6 @@ namespace ZundaChan.Core.Voicevox
             }
         }
 
-        private async Task<Stream> CreateVoiceAsync(string text)
-        {
-            return await client.CreateAsync(text, Config.SpeakerId);
-        }
-
         private async Task PlayVoiceAsync(Stream stream)
         {
             using (stream)
@@ -85,6 +97,32 @@ namespace ZundaChan.Core.Voicevox
                 await tcs.Task;
             }
             return;
+        }
+
+        static dynamic Parse(string json)
+        {
+            using var document = JsonDocument.Parse(json);
+            return toExpandoObject(document.RootElement);
+
+            static object? propertyValue(JsonElement elm) =>
+                elm.ValueKind switch
+                {
+                    JsonValueKind.Null => null,
+                    JsonValueKind.Number => elm.GetDecimal(),
+                    JsonValueKind.String => elm.GetString(),
+                    JsonValueKind.False => false,
+                    JsonValueKind.True => true,
+                    JsonValueKind.Array => elm.EnumerateArray().Select(m => propertyValue(m)).ToArray(),
+                    JsonValueKind.Undefined => null,
+                    JsonValueKind.Object => toExpandoObject(elm),
+                    _ => toExpandoObject(elm),
+                };
+
+            static System.Dynamic.ExpandoObject toExpandoObject(JsonElement elm) =>
+                elm.EnumerateObject()
+                .Aggregate(
+                    new System.Dynamic.ExpandoObject(),
+                    (exo, prop) => { ((IDictionary<string, object>)exo).Add(prop.Name, propertyValue(prop.Value)); return exo; });
         }
     }
 }

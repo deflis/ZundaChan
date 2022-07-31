@@ -16,18 +16,6 @@ namespace ZundaChan.Core.Voicevox
             client = new HttpClient();
         }
 
-        /// <summary>
-        /// AudioQuery + Synthesis を自動で行います
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="speakerId"></param>
-        /// <returns></returns>
-        public async Task<Stream> CreateAsync(string text, int speakerId)
-        {
-            var query = await BuildAudioQueryJsonAsync(text, speakerId);
-            return await SynthesisAsync(query, speakerId);
-        }
-
         public async Task<Speaker[]> GetSpeakersAsync()
         {
             var speakersUriBuilder = new UriBuilder(Config.BaseUrl);
