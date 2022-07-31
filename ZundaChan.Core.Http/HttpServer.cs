@@ -7,6 +7,7 @@ namespace ZundaChan.Core.Http
     {
         public HttpServer(IProxy proxy, int port)
         {
+            this.Proxy = proxy;
             var app = WebApplication.Create();
             app.Urls.Add($"http://0.0.0.0:{port}");
 
