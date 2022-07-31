@@ -1,25 +1,37 @@
-﻿using AI.Talk.Editor.Api;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
+using System.Reflection;
 
 namespace ZundaChan.Core.Aivoice
 {
     public class AivoiceProxy : IProxy, IDisposable
     {
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        private TtsControl ttsControl;
+        private dynamic ttsControl;
+        private Type hostStatus;
         private BlockingCollection<string> playTalkJobs = new BlockingCollection<string>();
 
         public AivoiceProxy()
         {
-            var thread = new Thread(new ThreadStart(OnStart));
-            thread.IsBackground = true;
-            thread.Start();
+            // MEMO: 実装はこちらを参考にした https://gist.github.com/ksasao/10e298a1adcd772d59eec1b43e3f701b
 
-            ttsControl = new TtsControl();
-            var hostnames= ttsControl.GetAvailableHostNames();
+            string path =
+                Environment.ExpandEnvironmentVariables("%ProgramW6432%")
+                + @"\AI\AIVoice\AIVoiceEditor\AI.Talk.Editor.Api.dll";
+
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException("最新のA.I.VOICE Editor をインストールしてください");
+            }
+
+            Assembly assembly = Assembly.LoadFrom(path);
+            hostStatus = assembly.GetType("AI.Talk.Editor.Api.HostStatus");
+            Type type = assembly.GetType("AI.Talk.Editor.Api.TtsControl");
+
+            ttsControl = Activator.CreateInstance(type, new object[] { });
+            var hostnames = ttsControl.GetAvailableHostNames();
             ttsControl.Initialize(hostnames[0]);
 
-            if (ttsControl.Status == HostStatus.NotRunning)
+            if (hostStatus.GetEnumName(ttsControl.Status) == "NotRunning")
             {
                 // ホストプログラムを起動する
                 ttsControl.StartHost();
@@ -30,6 +42,11 @@ namespace ZundaChan.Core.Aivoice
 
             Logger.Info("ホストバージョン: " + ttsControl.Version);
             Logger.Info("ホストへの接続を開始しました。");
+
+            var thread = new Thread(new ThreadStart(OnStart));
+            thread.IsBackground = true;
+            thread.Start();
+
 
         }
 
@@ -76,7 +93,7 @@ namespace ZundaChan.Core.Aivoice
             ttsControl.Text = text;
             ttsControl.Play();
 
-            while (ttsControl.Status == HostStatus.Busy)
+            while (hostStatus.GetEnumName(ttsControl.Status) == "Busy")
             {
                 await Task.Delay(100);
             }

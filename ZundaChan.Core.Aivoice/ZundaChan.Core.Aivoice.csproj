@@ -18,9 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="AI.Talk.Editor.Api">
-      <HintPath>C:\Program Files\AI\AIVoice\AIVoiceEditor\AI.Talk.Editor.Api.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
 </Project>
