@@ -18,9 +18,7 @@ namespace ZundaChan.Core.Voicevox
         {
 
             this.client = client;
-            var thread = new Thread(new ThreadStart(OnStart));
-            thread.IsBackground = true;
-            thread.Start();
+            Task.Run(ConsumePlayTalkJobs);
 
         }
 
@@ -47,7 +45,7 @@ namespace ZundaChan.Core.Voicevox
             }
         }
 
-        private async void OnStart()
+        private async void ConsumePlayTalkJobs()
         {
             foreach (var stream in playTalkJobs.GetConsumingEnumerable(CancellationToken.None))
             {
@@ -69,9 +67,9 @@ namespace ZundaChan.Core.Voicevox
 
         private async Task PlayVoiceAsync(Stream stream)
         {
-            using (stream)
-            using (var outputDevice = new WaveOutEvent() { DeviceNumber = Config.DeviceNumber })
-            {
+            using (stream) {
+                using var outputDevice = new WaveOutEvent() { DeviceNumber = Config.DeviceNumber };
+                
                 var tcs = new TaskCompletionSource<string>();
                 EventHandler<StoppedEventArgs>? h = null;
                 h = (_, _) =>

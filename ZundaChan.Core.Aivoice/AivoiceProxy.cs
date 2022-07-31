@@ -43,11 +43,7 @@ namespace ZundaChan.Core.Aivoice
             Logger.Info("ホストバージョン: " + ttsControl.Version);
             Logger.Info("ホストへの接続を開始しました。");
 
-            var thread = new Thread(new ThreadStart(OnStart));
-            thread.IsBackground = true;
-            thread.Start();
-
-
+            Task.Run(ConsumePlayTalkJobs);
         }
 
         public void Dispose()
@@ -57,23 +53,11 @@ namespace ZundaChan.Core.Aivoice
 
         public int AddTalkTask(string text)
         {
-            TalkTask(text);
+            playTalkJobs.Add(text);
             return 0;
         }
 
-        private void TalkTask(string text)
-        {
-            try
-            {
-                playTalkJobs.Add(text);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error("ボイス生成でエラーが発生しました", ex);
-            }
-        }
-
-        private async void OnStart()
+        private async void ConsumePlayTalkJobs()
         {
             foreach (var text in playTalkJobs.GetConsumingEnumerable(CancellationToken.None))
             {
