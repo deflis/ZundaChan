@@ -21,7 +21,7 @@ namespace ZundaChan.Core.Http
                     return;
                 }
                 var text = context.Request.Query["text"];
-                var taskId = proxy.AddTalkTask(text);
+                var taskId = proxy.AddTalkTask(new TalkTask(text));
                 context.Response.StatusCode = 200;
                 var json = JsonSerializer.Serialize(new { taskId });
                 if (!context.Request.Query.ContainsKey("callback"))

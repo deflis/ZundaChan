@@ -1,4 +1,5 @@
-﻿using ZundaChan.Core.BouyomiIpc;
+﻿using ZundaChan.Core;
+using ZundaChan.Core.BouyomiIpc;
 
 namespace FNF.Utility
 {
@@ -28,7 +29,7 @@ namespace FNF.Utility
         public void AddTalkTask(string sTalkText)
         {
             Logger.Info($"AddTalkTask({sTalkText})");
-            ipcServer.AddTalkTask(sTalkText);
+            ipcServer.AddTalkTask(new TalkTask(sTalkText));
         }
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace FNF.Utility
         public void AddTalkTask(string sTalkText, int iSpeed, int iVolume, int vType)
         {
             Logger.Info($"AddTalkTask({sTalkText},{iSpeed},{iVolume},{vType})");
-            ipcServer.AddTalkTask(sTalkText);
+            ipcServer.AddTalkTask(new TalkTask(sTalkText) { Speed = iSpeed, Volume = iVolume, Type = vType });
         }
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace FNF.Utility
         public void AddTalkTask(string sTalkText, int iSpeed, int iTone, int iVolume, int vType)
         {
             Logger.Info($"AddTalkTask({sTalkText},{iSpeed},{iTone},{iVolume},{vType})");
-            ipcServer.AddTalkTask(sTalkText);
+            ipcServer.AddTalkTask(new TalkTask(sTalkText) { Speed = iSpeed, Tone = iTone, Volume = iVolume, Type = vType });
         }
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace FNF.Utility
         public int AddTalkTask2(string sTalkText)
         {
             Logger.Info($"AddTalkTask2({sTalkText})");
-            return ipcServer.AddTalkTask(sTalkText);
+            return ipcServer.AddTalkTask(new TalkTask(sTalkText));
         }
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace FNF.Utility
         public int AddTalkTask2(string sTalkText, int iSpeed, int iTone, int iVolume, int vType)
         {
             Logger.Info($"AddTalkTask2({sTalkText},{iSpeed},{iTone},{iVolume},{vType})");
-            return ipcServer.AddTalkTask(sTalkText);
+            return ipcServer.AddTalkTask(new TalkTask(sTalkText) { Speed = iSpeed, Tone = iTone, Volume = iVolume, Type = vType });
         }
 
         /// <summary>

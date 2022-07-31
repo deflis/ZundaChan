@@ -27,17 +27,17 @@ namespace ZundaChan.Core.Voicevox
         /// </summary>
         /// <param name="sTalkText">喋らせたい文章</param>
         /// <returns>読み上げタスクID。</returns>
-        public int AddTalkTask(string text)
+        public int AddTalkTask(TalkTask task)
         {
-            TalkTask(text);
+            TalkTask(task);
             return 0;
         }
 
-        private async void TalkTask(string text)
+        private async void TalkTask(TalkTask task)
         {
             try
             {
-                playTalkJobs.Add(await CreateVoiceAsync(text));
+                playTalkJobs.Add(await CreateVoiceAsync(task.Text));
             }
             catch (Exception ex)
             {
@@ -67,9 +67,10 @@ namespace ZundaChan.Core.Voicevox
 
         private async Task PlayVoiceAsync(Stream stream)
         {
-            using (stream) {
+            using (stream)
+            {
                 using var outputDevice = new WaveOutEvent() { DeviceNumber = Config.DeviceNumber };
-                
+
                 var tcs = new TaskCompletionSource<string>();
                 EventHandler<StoppedEventArgs>? h = null;
                 h = (_, _) =>

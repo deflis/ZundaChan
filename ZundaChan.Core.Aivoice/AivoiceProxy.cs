@@ -8,7 +8,7 @@ namespace ZundaChan.Core.Aivoice
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private dynamic ttsControl;
         private Type hostStatus;
-        private BlockingCollection<string> playTalkJobs = new BlockingCollection<string>();
+        private BlockingCollection<TalkTask> playTalkJobs = new BlockingCollection<TalkTask>();
 
         public AivoiceProxy()
         {
@@ -51,19 +51,19 @@ namespace ZundaChan.Core.Aivoice
             ttsControl.Disconnect();
         }
 
-        public int AddTalkTask(string text)
+        public int AddTalkTask(TalkTask task)
         {
-            playTalkJobs.Add(text);
+            playTalkJobs.Add(task);
             return 0;
         }
 
         private async void ConsumePlayTalkJobs()
         {
-            foreach (var text in playTalkJobs.GetConsumingEnumerable(CancellationToken.None))
+            foreach (var task in playTalkJobs.GetConsumingEnumerable(CancellationToken.None))
             {
                 try
                 {
-                    await PlayVoiceAsync(text);
+                    await PlayVoiceAsync(task);
                 }
                 catch (Exception ex)
                 {
@@ -72,9 +72,9 @@ namespace ZundaChan.Core.Aivoice
             }
         }
 
-        private async Task PlayVoiceAsync(string text)
+        private async Task PlayVoiceAsync(TalkTask task)
         {
-            ttsControl.Text = text;
+            ttsControl.Text = task.Text;
             ttsControl.Play();
 
             while (hostStatus.GetEnumName(ttsControl.Status) == "Busy")

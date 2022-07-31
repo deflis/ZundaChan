@@ -35,9 +35,9 @@ namespace ZundaChan.Core.BouyomiIpc
         /// </summary>
         /// <param name="sTalkText">喋らせたい文章</param>
         /// <returns>読み上げタスクID。</returns>
-        public int AddTalkTask(string sTalkText)
+        public int AddTalkTask(TalkTask task)
         {
-            return proxy.AddTalkTask(sTalkText);
+            return proxy.AddTalkTask(task);
         }
     }
 }
