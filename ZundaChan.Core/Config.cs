@@ -50,6 +50,18 @@ namespace ZundaChan.Core
             }
         }
 
+
+        /// <summary>
+        /// HTTPサーバの待受ポート
+        /// </summary>
+        public static int HttpPort
+        {
+            get
+            {
+                return (int)(long)Instance.configFile["http_port"];
+            }
+        }
+
         /// <summary>
         /// 設定を再読込する
         /// </summary>
@@ -62,11 +74,7 @@ namespace ZundaChan.Core
         private static TomlTable LoadConfig()
         {
             string appFilePath = System.Reflection.Assembly.GetEntryAssembly().Location;
-            var tomlFile = System.Text.RegularExpressions.Regex.Replace(
-                appFilePath,
-                "\\.exe|dll$",
-                ".toml",
-                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            var tomlFile =Path.Combine(Path.GetDirectoryName(appFilePath), $"{Path.GetFileNameWithoutExtension(appFilePath)}.toml");
             Logger.Info($"load config from {tomlFile}");
 
             string toml;
