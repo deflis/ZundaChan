@@ -1,0 +1,6 @@
+﻿# オーディオデバイスを指定する
+device = -1
+# キャラクターを指定する
+speaker = 3
+# VOICEVOX ENGINEのURLを指定する
+voicevox_engine = "http://localhost:50021/"

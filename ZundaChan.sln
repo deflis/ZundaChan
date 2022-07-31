@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZundaChan.Core.Http", "Zund
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZundaChan.Http", "ZundaChan.Http\ZundaChan.Http.csproj", "{643CBBCA-53B8-453E-8505-E54093997BAF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZundaChan.Core.Aivoice", "ZundaChan.Core.Aivoice\ZundaChan.Core.Aivoice.csproj", "{7AB5B8C7-2164-457D-8F84-885F1FE35CFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkaneChan.Ipc", "AkaneChan.Ipc\AkaneChan.Ipc.csproj", "{D53F945C-D675-40C3-93B6-EE2636B9252A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{643CBBCA-53B8-453E-8505-E54093997BAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{643CBBCA-53B8-453E-8505-E54093997BAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{643CBBCA-53B8-453E-8505-E54093997BAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AB5B8C7-2164-457D-8F84-885F1FE35CFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AB5B8C7-2164-457D-8F84-885F1FE35CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AB5B8C7-2164-457D-8F84-885F1FE35CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AB5B8C7-2164-457D-8F84-885F1FE35CFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D53F945C-D675-40C3-93B6-EE2636B9252A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D53F945C-D675-40C3-93B6-EE2636B9252A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D53F945C-D675-40C3-93B6-EE2636B9252A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D53F945C-D675-40C3-93B6-EE2636B9252A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

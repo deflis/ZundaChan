@@ -38,3 +38,8 @@ jobs:
         with:
           name: http
           path: ZundaChan.Http\bin\Release\net6.0-windows
+
+      - uses: actions/upload-artifact@v1.0.0
+        with:
+          name: ipc
+          path: AkaneChan.Ipc\bin\Release\net48

@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <LangVersion>latestMajor</LangVersion>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>BouyomiChan</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZundaChan.Core.BouyomiIpc\ZundaChan.Core.BouyomiIpc.csproj" />
+    <ProjectReference Include="..\ZundaChan.Core.Aivoice\ZundaChan.Core.Aivoice.csproj" />
+    <ProjectReference Include="..\ZundaChan.Core\ZundaChan.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Runtime.Remoting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="BouyomiChan.toml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
