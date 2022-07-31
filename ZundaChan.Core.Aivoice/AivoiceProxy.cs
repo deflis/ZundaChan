@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
+using System.Text.Json;
 
 namespace ZundaChan.Core.Aivoice
 {
@@ -74,13 +75,49 @@ namespace ZundaChan.Core.Aivoice
 
         private async Task PlayVoiceAsync(TalkTask task)
         {
+            // マスターコントロールを取得する
+            string controlJson = ttsControl.MasterControl;
+            string backupText = ttsControl.Text;
+            var control = JsonSerializer.Deserialize<MasterControl>(controlJson);
+            if (control == null)
+            {
+                Logger.Error("マスターコントロールのJSONパースに失敗しました。", controlJson);
+                throw new Exception("マスターコントロールのJSONパースに失敗しました。");
+            }
+            if (task.Tone != -1)
+            {
+                control.Pitch = task.Tone / 100;
+            }
+            if (task.Volume != -1)
+            {
+                control.Volume = task.Volume / 100;
+            }
+            if (task.Speed != -1)
+            {
+                control.Speed = task.Speed / 100;
+            }
             ttsControl.Text = task.Text;
+
+            ttsControl.MasterControl = JsonSerializer.Serialize(control);
             ttsControl.Play();
 
             while (hostStatus.GetEnumName(ttsControl.Status) == "Busy")
             {
                 await Task.Delay(100);
             }
+            // 元に戻す
+            ttsControl.MasterControl = controlJson;
+            ttsControl.Text = backupText;
+        }
+        public class MasterControl
+        {
+            public float Volume { get; set; }
+            public float Speed { get; set; }
+            public float Pitch { get; set; }
+            public float PitchRange { get; set; }
+            public long MiddlePause { get; set; }
+            public long LongPause { get; set; }
+            public long SentencePause { get; set; }
         }
     }
 }
