@@ -31,15 +31,15 @@ jobs:
 
       - uses: actions/upload-artifact@v1.0.0
         with:
-          name: ipc
+          name: ZundaChan.Ipc
           path: ZundaChan.Ipc\bin\Release\net48
 
       - uses: actions/upload-artifact@v1.0.0
         with:
-          name: http
+          name: ZundaChan.Http
           path: ZundaChan.Http\bin\Release\net6.0-windows
 
       - uses: actions/upload-artifact@v1.0.0
         with:
-          name: ipc
+          name: AkaneChan.Ipc
           path: AkaneChan.Ipc\bin\Release\net48
