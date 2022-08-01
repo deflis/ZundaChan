@@ -101,11 +101,12 @@ namespace ZundaChan.Core.Aivoice
             ttsControl.MasterControl = JsonSerializer.Serialize(control);
             ttsControl.Play();
 
+            // 再生完了イベントがないのでBusyでなくなるまで待つ
             while (hostStatus.GetEnumName(ttsControl.Status) == "Busy")
             {
                 await Task.Delay(100);
             }
-            // 元に戻す
+            // 変更した状態を元に戻す
             ttsControl.MasterControl = controlJson;
             ttsControl.Text = backupText;
         }
