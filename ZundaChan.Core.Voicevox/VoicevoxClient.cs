@@ -79,7 +79,10 @@ namespace ZundaChan.Core.Voicevox
             {
                 throw new HttpRequestException($"{await synthesisResult.Content.ReadAsStringAsync()}");
             }
-            return await synthesisResult.Content.ReadAsStreamAsync();
+            using var inputStream = await synthesisResult.Content.ReadAsStreamAsync();
+            var outputStream = new MemoryStream();
+            await inputStream.CopyToAsync(outputStream);
+            return outputStream;
         }
 
         public class Speaker
