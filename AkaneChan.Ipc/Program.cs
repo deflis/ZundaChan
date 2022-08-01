@@ -18,7 +18,7 @@ var logger = NLog.LogManager.GetCurrentClassLogger();
 var proxy = new AivoiceProxy();
 try
 {
-    var ipcServer = new IpcServer(proxy);
+    using var ipcServer = new IpcServer(proxy);
     logger.Info("IPCサーバを起動しました");
 }
 catch (Exception ex)

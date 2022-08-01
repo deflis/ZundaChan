@@ -73,17 +73,14 @@ namespace ZundaChan.Core
         private Config() => configFile = LoadConfig();
         private static TomlTable LoadConfig()
         {
-            string appFilePath = System.Reflection.Assembly.GetEntryAssembly().Location;
-            var tomlFile =Path.Combine(Path.GetDirectoryName(appFilePath), $"{Path.GetFileNameWithoutExtension(appFilePath)}.toml");
+            string appFilePath = System.Reflection.Assembly.GetEntryAssembly()!.Location;
+            var tomlFile = Path.Combine(Path.GetDirectoryName(appFilePath)!, $"{Path.GetFileNameWithoutExtension(appFilePath)}.toml");
             Logger.Info($"load config from {tomlFile}");
 
-            string toml;
-            using (var tomlStream = new FileStream(tomlFile, FileMode.Open))
-            using (var tomlReader = new StreamReader(tomlStream))
-            {
-                toml = tomlReader.ReadToEnd();
-            }
-            return Toml.ToModel(toml);
+            using var tomlStream = new FileStream(tomlFile, FileMode.Open);
+            using var tomlReader = new StreamReader(tomlStream);
+            return Toml.ToModel(tomlReader.ReadToEnd());
+
         }
     }
 }

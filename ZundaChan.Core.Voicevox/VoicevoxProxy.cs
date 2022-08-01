@@ -53,8 +53,7 @@ namespace ZundaChan.Core.Voicevox
                 {
                     query.speedScale = (double)query.speedScale * task.Speed / 100;
                 }
-                Logger.Debug(JsonSerializer.Serialize(query));
-                playTalkJobs.Add(await client.SynthesisAsync( JsonSerializer.Serialize(query), speakerId));
+                playTalkJobs.Add(await client.SynthesisAsync(JsonSerializer.Serialize(query), speakerId));
             }
             catch (Exception ex)
             {
@@ -122,7 +121,7 @@ namespace ZundaChan.Core.Voicevox
                 elm.EnumerateObject()
                 .Aggregate(
                     new System.Dynamic.ExpandoObject(),
-                    (exo, prop) => { ((IDictionary<string, object>)exo).Add(prop.Name, propertyValue(prop.Value)); return exo; });
+                    (exo, prop) => { ((IDictionary<string, object?>)exo).Add(prop.Name, propertyValue(prop.Value)); return exo; });
         }
     }
 }
